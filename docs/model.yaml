@@ -1,0 +1,43 @@
+User:
+  required:
+    - email
+    - password
+  properties:
+    id:
+      type: string
+      format: uuid
+      readOnly: true
+    role:
+      $ref: "#/components/schemas/UserRole"
+    firstName:
+      type: string
+    lastName:
+      type: string
+    phone:
+      type: string
+      format: phone
+      example: "+753 92 321 54 76"
+    email:
+      type: string
+    password:
+      type: string
+      writeOnly: true
+    createdAt:
+      type: string
+      format: date-time
+      readOnly: true
+    updatedAt:
+      type: string
+      format: date-time
+      readOnly: true
+    deletedAt:
+      type: string
+      format: date-time
+      readOnly: true
+
+UserRole:
+  type: string
+  readOnly: true
+  enum:
+    - "USER"
+    - "ADMIN"
