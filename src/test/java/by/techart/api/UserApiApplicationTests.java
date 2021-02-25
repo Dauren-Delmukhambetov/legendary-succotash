@@ -1,10 +1,10 @@
-package by.techart.learn;
+package by.techart.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LearnApplicationTests {
+class UserApiApplicationTests {
 
 	@Test
 	void contextLoads() {
