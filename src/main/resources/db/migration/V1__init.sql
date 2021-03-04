@@ -8,7 +8,7 @@ CREATE TABLE users(
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP
-)
+);
 
 CREATE TABLE user_roles(
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
