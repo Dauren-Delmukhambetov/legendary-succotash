@@ -6,10 +6,8 @@ services:
     image: postgres
     container_name: postgres-base
     restart: always
-    volumes:
-    - D:\Projects\Training\Data:/var/lib/postgresql/data
     ports:
     - 8081:5432
     environment:
-      POSTGRES_USER: karen
+      POSTGRES_USER: userapi_app
       POSTGRES_PASSWORD: HelloThere
