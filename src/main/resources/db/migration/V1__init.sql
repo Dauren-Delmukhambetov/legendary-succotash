@@ -1,6 +1,6 @@
 CREATE TABLE users(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    first_name varchar(50) NOT NULL,
+    first_name varchar(50),
     last_name varchar (50),
     email varchar (255) UNIQUE NOT NULL,
     password varchar (50) NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE users(
 );
 
 CREATE TABLE user_roles(
-    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     role varchar (50) NOT NULL,
-    user_id int,
+    user_id bigint,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
