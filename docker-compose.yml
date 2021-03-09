@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    container_name: postgres-base
+    restart: always
+    ports:
+    - 8081:5432
+    environment:
+      POSTGRES_USER: userapi_app
+      POSTGRES_PASSWORD: HelloThere
