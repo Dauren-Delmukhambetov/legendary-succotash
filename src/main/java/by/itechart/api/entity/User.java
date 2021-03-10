@@ -18,12 +18,15 @@ public class User {
 
     private String lastName;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     private String phone;
 
+    @Column(nullable = false)
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
