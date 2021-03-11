@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://localhost:8081/userapi
+    url: jdbc:postgresql://localhost:8081/userapi_app
     username: userapi_app
     password: HelloThere
     driver-class-name: org.postgresql.Driver
