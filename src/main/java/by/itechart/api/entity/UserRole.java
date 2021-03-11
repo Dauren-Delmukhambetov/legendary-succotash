@@ -1,13 +1,11 @@
 package by.itechart.api.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user_roles")
-@Getter
-@Setter
+@Data
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
