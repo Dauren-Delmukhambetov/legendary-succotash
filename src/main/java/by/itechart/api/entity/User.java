@@ -1,12 +1,15 @@
 package by.itechart.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,8 @@ public class User {
     private LocalDate deletedAt;
 
     @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    @JsonBackReference
     private UserRole userRole;
 
 }
