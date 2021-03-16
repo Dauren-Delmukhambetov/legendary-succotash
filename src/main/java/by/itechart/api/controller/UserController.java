@@ -1,16 +1,19 @@
 package by.itechart.api.controller;
 
+import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.User;
 import by.itechart.api.service.impl.UserServiceImpl;
+import by.itechart.api.util.annotation.DTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
@@ -33,18 +36,23 @@ public class UserController {
     }
 
     @PatchMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<User> updateUser(@DTO(UserDTO.class) User user) {
+        user.setUpdatedAt(LocalDate.now());
         return new ResponseEntity<>(userService.update(user), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
-        userService.delete(id);
+        Optional<User> user = userService.findById(id);
+        user.ifPresent(user1 -> {
+            user1.setDeletedAt(LocalDate.now());
+            userService.update(user1);
+        });
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@DTO(UserDTO.class) User user) {
         return new ResponseEntity<>(userService.create(user),HttpStatus.CREATED);
     }
 }

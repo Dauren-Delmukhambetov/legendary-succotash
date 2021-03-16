@@ -5,6 +5,10 @@ plugins {
 	id 'org.sonarqube' version '3.1.1'
 }
 
+compileJava {
+	options.compilerArgs += ["--enable-preview"]
+}
+
 group = 'by.itechart'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '15'
@@ -33,10 +37,12 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+	compileOnly('org.modelmapper:modelmapper:1.1.0')
 }
 
 test {
 	useJUnitPlatform()
+	jvmArgs '--enable-preview'
 }
 
 sonarqube {
