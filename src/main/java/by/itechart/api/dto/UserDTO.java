@@ -1,11 +1,14 @@
 package by.itechart.api.dto;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.persistence.Id;
-
-public record UserDTO(@Id @JsonProperty("id") Long id, @JsonProperty("firstName") String firstname,
-                      @JsonProperty("lastName") String lastname, @JsonProperty("email") String email,
-                      @JsonProperty("password") String password, @JsonProperty("phone") String phone
-                     ) {
-
+@NoArgsConstructor
+@Data
+public class UserDTO {
+    Long id;
+    String firstName;
+    String lastName;
+    String email;
+    String password;
+    String phone;
 }

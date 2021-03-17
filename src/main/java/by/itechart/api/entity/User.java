@@ -1,8 +1,8 @@
 package by.itechart.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

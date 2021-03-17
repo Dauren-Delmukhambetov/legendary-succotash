@@ -23,6 +23,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Collections;
 
+/**
+ * This processor is reflecting to not used DTO annotation. Could be changed later.
+ */
 public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
     private static final ModelMapper modelMapper = new ModelMapper();
     private final EntityManager entityManager;

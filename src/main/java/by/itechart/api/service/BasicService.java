@@ -1,6 +1,6 @@
 package by.itechart.api.service;
 
-import by.itechart.api.entity.User;
+import by.itechart.api.dto.UserDTO;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface BasicService<T> {
     T create(T t);
-    T update(T t);
+    T update(Long id, T t);
     void delete(Long id);
     List<T> findAll();
 }
