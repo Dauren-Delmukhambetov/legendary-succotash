@@ -2,7 +2,6 @@ package by.itechart.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -37,7 +36,6 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "user_id")
-    @JsonBackReference
     private UserRole userRole;
 
 }

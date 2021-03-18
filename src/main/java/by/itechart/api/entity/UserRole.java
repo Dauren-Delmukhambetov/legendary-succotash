@@ -18,7 +18,6 @@ public class UserRole {
     private Role role;
 
     @OneToOne(mappedBy = "userRole")
-    @JsonManagedReference
     private User user;
 
 }

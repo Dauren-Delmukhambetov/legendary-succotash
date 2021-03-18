@@ -5,9 +5,6 @@ plugins {
 	id 'org.sonarqube' version '3.1.1'
 }
 
-compileJava {
-	options.compilerArgs += ["--enable-preview"]
-}
 
 group = 'by.itechart'
 version = '0.0.1-SNAPSHOT'
@@ -42,7 +39,6 @@ dependencies {
 
 test {
 	useJUnitPlatform()
-	jvmArgs '--enable-preview'
 }
 
 sonarqube {

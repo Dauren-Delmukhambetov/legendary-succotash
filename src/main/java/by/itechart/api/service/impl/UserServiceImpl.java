@@ -6,7 +6,6 @@ import by.itechart.api.repository.UserRepository;
 import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -54,9 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User convertToEntity(UserDTO userDTO) {
-        User user = modelMapper.map(userDTO, User.class);
-        System.out.println(user.toString());
-        return user;
+        return modelMapper.map(userDTO, User.class);
     }
 
     private UserDTO convertToDTO(User user) {

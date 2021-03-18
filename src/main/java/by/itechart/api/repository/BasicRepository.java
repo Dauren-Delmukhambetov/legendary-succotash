@@ -3,7 +3,6 @@ package by.itechart.api.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import java.util.List;
 
 /**
  * Basic repository choosed because there could be some possibilities that

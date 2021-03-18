@@ -1,7 +1,5 @@
 package by.itechart.api.service;
 
-import by.itechart.api.dto.UserDTO;
-
 import java.util.List;
 
 /**
