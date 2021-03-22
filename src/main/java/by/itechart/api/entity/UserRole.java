@@ -1,6 +1,5 @@
 package by.itechart.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
