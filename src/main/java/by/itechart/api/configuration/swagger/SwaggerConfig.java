@@ -1,5 +1,9 @@
 package by.itechart.api.configuration.swagger;
 
+import by.itechart.api.entity.User;
+import by.itechart.api.entity.UserRole;
+import com.fasterxml.classmate.TypeResolver;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -10,7 +14,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
+@RequiredArgsConstructor
 public class SwaggerConfig {
+
+    private final TypeResolver typeResolver;
 
     @Bean
     public Docket userApiApp() {
@@ -19,7 +26,8 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(userApiAppInfo());
+                .apiInfo(userApiAppInfo())
+                .additionalModels(typeResolver.resolve(User.class)).additionalModels(typeResolver.resolve(UserRole.class));
     }
 
     private ApiInfo userApiAppInfo() {

@@ -1,6 +1,10 @@
 package by.itechart.api.entity;
 
-import lombok.*;
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -9,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value = "user model")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
