@@ -35,8 +35,8 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	compileOnly('org.modelmapper:modelmapper:1.1.0')
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+	compileOnly('io.springfox:springfox-swagger2:2.7.0')
+	compileOnly('io.springfox:springfox-swagger-ui:2.7.0')
 }
 
 test {
