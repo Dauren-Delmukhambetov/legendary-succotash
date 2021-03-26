@@ -6,10 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -23,21 +19,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 2, max = 10, message = "First name must be between 2 and 10 characters")
+
     private String firstName;
 
-    @Size(min = 2, max = 25, message = "Last name must be between 2 and 25 characters")
+
     private String lastName;
 
     @Column(nullable = false)
-    @Email(message = "Email should be valid")
     private String email;
 
     @Column(nullable = false)
-    @NotNull(message = "Password cannot be null")
     private String password;
 
-    @Pattern(regexp = "(^$|[0-9]{10})")
     private String phone;
 
     @Column(nullable = false)
