@@ -4,9 +4,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -32,11 +31,11 @@ public class User {
     private String phone;
 
     @Column(nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
-    private LocalDate deletedAt;
+    private LocalDateTime deletedAt;
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "user_id")

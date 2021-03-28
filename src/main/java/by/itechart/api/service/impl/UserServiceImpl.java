@@ -7,7 +7,7 @@ import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO create(UserDTO userDTO) {
         User user = convertToEntity(userDTO);
-        user.setCreatedAt(LocalDate.now());
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
         return userDTO;
     }
@@ -32,7 +32,18 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid User id"));
         this.modelMapper.map(userDTO, user);
-        user.setUpdatedAt(LocalDate.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.saveAndFlush(user);
+        return userDTO;
+    }
+
+    //TODO change this DTO to required DTO
+    public UserDTO updateUserPartially(Long id, UserDTO userDTO) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
+        //TODO create method here to update user partially according to received fields
+        this.modelMapper.map(userDTO, user);
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.saveAndFlush(user);
         return userDTO;
     }
@@ -41,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         Optional<User> user = userRepository.findById(id);
         user.ifPresent(currentUser -> {
-            currentUser.setDeletedAt(LocalDate.now());
+            currentUser.setDeletedAt(LocalDateTime.now());
             userRepository.saveAndFlush(currentUser);
         });
     }
