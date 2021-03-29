@@ -1,6 +1,5 @@
 package by.itechart.api.entity;
 
-import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "user model")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
