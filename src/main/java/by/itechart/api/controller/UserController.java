@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class UserController implements UserControllerInfo {
 
     @PatchMapping("{id}")
     public ResponseEntity<UserDTO> updateUserPartially(@PathVariable Long id, @RequestBody UserDTO user) {
-        return new ResponseEntity<>(userService.updateUserPartially(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
