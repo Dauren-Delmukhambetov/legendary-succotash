@@ -1,5 +1,6 @@
 package by.itechart.api.controller;
 
+import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,8 @@ public class UserController implements UserControllerInfo {
         return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<UserDTO> updateUserPartially(@PathVariable Long id, @RequestBody UserDTO user) {
-        return new ResponseEntity<>(userService.update(id, user), HttpStatus.OK);
-    }
-
     @PutMapping("{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UpdateUserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
     }
 

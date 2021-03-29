@@ -1,5 +1,6 @@
 package by.itechart.api.service.impl;
 
+import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.User;
 import by.itechart.api.repository.UserRepository;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(Long id, UserDTO userDTO) {
+    public UpdateUserDTO update(Long id, UpdateUserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid User id"));
         this.modelMapper.map(userDTO, user);
