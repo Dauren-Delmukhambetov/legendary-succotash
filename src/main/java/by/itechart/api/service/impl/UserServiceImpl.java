@@ -1,5 +1,6 @@
 package by.itechart.api.service.impl;
 
+import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.User;
@@ -22,10 +23,12 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
-        User user = convertToEntity(userDTO);
+    public UserDTO create(CreateUserDTO createUserDTO) {
+        User user = convertToEntity(createUserDTO);
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
+        UserDTO userDTO = new UserDTO();
+        this.modelMapper.map(user, userDTO);
         return userDTO;
     }
 
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
         return userList.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    private User convertToEntity(UserDTO userDTO) {
+    private User convertToEntity(CreateUserDTO userDTO) {
         return modelMapper.map(userDTO, User.class);
     }
 

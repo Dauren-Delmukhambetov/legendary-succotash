@@ -1,5 +1,6 @@
 package by.itechart.api.controller;
 
+import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +43,7 @@ public interface UserControllerInfo {
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
     ResponseEntity<UserDTO> createUser(@ApiParam(value = "User information for creation", required = true)
-                                       UserDTO user);
+                                               CreateUserDTO user);
 
     @ApiOperation(value = "Delete user", notes = "This method is used to delete user depending on user's id")
     ResponseEntity<UserDTO> deleteUser(@ApiParam(value = "Id for user deletion", required = true)
