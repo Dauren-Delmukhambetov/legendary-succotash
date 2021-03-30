@@ -25,16 +25,16 @@ public interface UserControllerInfo {
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
     ResponseEntity<UserDTO> getCurrentUser();
 
-    @ApiOperation(value = "Update user with full changes", notes = "This method is used to change every information in" +
+    @ApiOperation(value = "Update user partially or with full changes", notes = "This method is used to change information in" +
             "user depending on user's id")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully updated user"),
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
-    ResponseEntity<UpdateUserDTO> updateUser(@ApiParam(value = "id for user update", required = true)
-                                                     Long id,
-                                             @ApiParam(value = "user information for update", required = true)
-                                                     UpdateUserDTO user);
+    ResponseEntity<UserDTO> updateUser(@ApiParam(value = "id for user update", required = true)
+                                               Long id,
+                                       @ApiParam(value = "user information for update", required = true)
+                                               UpdateUserDTO user);
 
     @ApiOperation(value = "Create new user", notes = "This method is used to create new user")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully created new user"),

@@ -33,8 +33,8 @@ public class UserController implements UserControllerInfo {
         return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<UpdateUserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO userDTO) {
+    @PatchMapping("{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
     }
 

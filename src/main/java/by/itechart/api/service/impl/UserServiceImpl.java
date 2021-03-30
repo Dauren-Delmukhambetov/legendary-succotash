@@ -30,13 +30,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserDTO update(Long id, UpdateUserDTO userDTO) {
+    public UserDTO update(Long id, UpdateUserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid User id"));
         this.modelMapper.map(userDTO, user);
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.saveAndFlush(user);
-        return userDTO;
+        UserDTO returnedUser = new UserDTO();
+        this.modelMapper.map(user, returnedUser);
+        return returnedUser;
     }
 
     @Override
