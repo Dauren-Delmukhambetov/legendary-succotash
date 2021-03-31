@@ -1,21 +1,12 @@
 package by.itechart.api.dto;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
-@ApiModel(value = "User model")
-public class UserDTO {
-    @ApiModelProperty(
-            value = "User ID",
-            name = "id",
-            dataType = "Long",
-            example = "19485",
-            readOnly = true)
-    Long id;
+@NoArgsConstructor
+public class CreateUserDTO {
 
     @ApiModelProperty(
             value = "User's first name",
@@ -40,8 +31,11 @@ public class UserDTO {
     String email;
 
     @ApiModelProperty(
-            notes = "User's password should not be exposed",
-            hidden = true)
+            value = "User's password",
+            name = "password",
+            dataType = "String",
+            example = "Password123",
+            required = true)
     String password;
 
     @ApiModelProperty(
@@ -50,5 +44,4 @@ public class UserDTO {
             dataType = "String",
             example = "+375 (29) 678-52-92")
     String phone;
-
 }
