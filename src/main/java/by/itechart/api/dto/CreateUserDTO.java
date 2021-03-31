@@ -1,6 +1,6 @@
 package by.itechart.api.dto;
 
-import by.itechart.api.configuration.util.annotation.Telephone;
+import by.itechart.api.util.annotation.Telephone;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;

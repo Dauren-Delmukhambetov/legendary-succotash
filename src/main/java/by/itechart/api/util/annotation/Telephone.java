@@ -1,6 +1,6 @@
-package by.itechart.api.configuration.util.annotation;
+package by.itechart.api.util.annotation;
 
-import by.itechart.api.configuration.util.validation.TelephoneValidator;
+import by.itechart.api.util.validation.TelephoneValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
