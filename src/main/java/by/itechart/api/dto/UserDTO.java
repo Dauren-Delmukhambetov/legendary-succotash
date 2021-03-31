@@ -2,14 +2,8 @@ package by.itechart.api.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import by.itechart.api.configuration.util.annotation.Telephone;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @Data
@@ -28,7 +22,6 @@ public class UserDTO {
             name = "firstName",
             dataType = "String",
             example = "Adam")
-    @Size(min = 2, max = 10, message = "First name must be between 2 and 10 characters")
     String firstName;
 
     @ApiModelProperty(
@@ -36,7 +29,6 @@ public class UserDTO {
             name = "lastName",
             dataType = "String",
             example = "Smith")
-    @Size(min = 2, max = 25, message = "Last name must be between 2 and 25 characters")
     String lastName;
 
     @ApiModelProperty(
@@ -45,13 +37,11 @@ public class UserDTO {
             dataType = "String",
             example = "adam.smith@gmail.com",
             required = true)
-    @Email(message = "Email should be valid")
     String email;
 
     @ApiModelProperty(
             notes = "User's password should not be exposed",
             hidden = true)
-    @NotNull(message = "Password cannot be null")
     String password;
 
     @ApiModelProperty(
@@ -59,7 +49,6 @@ public class UserDTO {
             name = "phone",
             dataType = "String",
             example = "+375 (29) 678-52-92")
-    @Telephone
     String phone;
 
 }

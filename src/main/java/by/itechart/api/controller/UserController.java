@@ -47,7 +47,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser((@Valid @RequestBody CreateUserDTO user) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }
 }
