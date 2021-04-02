@@ -36,8 +36,7 @@ public class User {
 
     private LocalDateTime deletedAt;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    @OneToOne(mappedBy = "user")
     private UserRole userRole;
 
 }

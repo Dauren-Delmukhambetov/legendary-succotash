@@ -1,8 +1,6 @@
 package by.itechart.api.exception;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -11,14 +9,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class UserResponseEntityExceptionHandler extends
         ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(value =
-            {IllegalArgumentException.class, IllegalStateException.class})
-    protected ResponseEntity<Object> handleConflict(
-            RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "This is exception test response";
-        return handleExceptionInternal(ex, bodyOfResponse,
-                new HttpHeaders(), HttpStatus.CONFLICT, request);
+    @ResponseBody
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ExceptionInfo handleUserNotFoundException(UserNotFoundException ex) {
+        String bodyOfResponse = ex.getMessage();
+        return new ExceptionInfo(bodyOfResponse);
     }
 
 }
