@@ -1,12 +1,18 @@
 package by.itechart.api.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class ExceptionInfo {
-    private String message;
+  @NonNull
+  private String message;
+  private HttpStatus status;
+  private List<String> errors;
+
 }
