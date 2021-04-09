@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class UserController implements UserControllerInfo {
     private final UserServiceImpl userService;
 
     @GetMapping("/all")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
@@ -30,16 +32,19 @@ public class UserController implements UserControllerInfo {
      *
      * @return current user
      */
+    @RolesAllowed("ROLE_ADMIN")
     @GetMapping("/current")
     public ResponseEntity<UserDTO> getCurrentUser() {
         return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
+    @RolesAllowed("ROLE_USER")
     @PatchMapping("{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
         userService.delete(id);
@@ -47,6 +52,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @PostMapping
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }

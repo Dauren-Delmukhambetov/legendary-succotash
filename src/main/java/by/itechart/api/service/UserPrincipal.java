@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//not sure this is needed
 public class UserPrincipal implements UserDetails {
-    private User user;
-    private final String ROLE_PREFIX = "ROLE_"; //does this needed?
+    private final User user;
 
     public UserPrincipal(User user) {
         this.user = user;
@@ -20,7 +18,8 @@ public class UserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<>();
-        return list; //empty for now
+        list.add(user.getUserRole());
+        return list;
     }
 
     @Override

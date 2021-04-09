@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Data
-@Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -21,7 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //TODO create custom method with user details?
+        //FIXME find why stackoverflow here in debug mode
         Optional<User> user = userRepository.findByEmail(username);
         user.orElseThrow(() -> new UserNotFoundException("User not found"));
         return new UserPrincipal(user.get());
