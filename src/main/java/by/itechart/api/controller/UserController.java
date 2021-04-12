@@ -4,6 +4,8 @@ import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.service.impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class UserController implements UserControllerInfo {
 
     private final UserServiceImpl userService;
 
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @GetMapping("/all")
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -32,18 +35,21 @@ public class UserController implements UserControllerInfo {
      *
      * @return current user
      */
-    @RolesAllowed("ROLE_ADMIN")
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/current")
     public ResponseEntity<UserDTO> getCurrentUser() {
         return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
-    @RolesAllowed("ROLE_USER")
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @PatchMapping("{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
     }
 
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
@@ -51,8 +57,9 @@ public class UserController implements UserControllerInfo {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @PostMapping
-    @RolesAllowed("ROLE_ADMIN")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }

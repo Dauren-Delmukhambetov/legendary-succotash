@@ -26,18 +26,21 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testng:testng:6.10', 'org.easytesting:fest-assert:1.4'
 	compileOnly 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	compileOnly('org.modelmapper:modelmapper:1.1.0')
-	compileOnly('io.springfox:springfox-swagger2:2.7.0')
-	compileOnly('io.springfox:springfox-swagger-ui:2.7.0')
+	compileOnly('io.springfox:springfox-swagger2:3.0.0')
+	compileOnly('io.springfox:springfox-boot-starter:3.0.0')
 }
 
 test {

@@ -3,16 +3,15 @@ package by.itechart.api.controller;
 import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface UserControllerInfo {
-    @ApiOperation(value = "Get all users", notes = "This method will return all users from DB")
+    @ApiOperation(value = "Get all users", notes = "This method will return all users from DB", authorizations = {
+            @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
+    })
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully returned all users"),
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
