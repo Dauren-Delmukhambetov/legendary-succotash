@@ -12,10 +12,12 @@ import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,6 +63,15 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll() {
         List<User> userList = userRepository.findAll();
         return userList.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO getCurrentUser(Authentication authentication) {
+        Optional<Authentication> optionalAuthentication = Optional.ofNullable(authentication);
+        optionalAuthentication.orElseThrow(() -> new UserNotFoundException("User not found"));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(authentication.getName());
+        return userDTO;
     }
 
     private User convertToEntity(CreateUserDTO userDTO) {

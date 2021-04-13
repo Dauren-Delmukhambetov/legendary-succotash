@@ -4,11 +4,10 @@ import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.service.impl.UserServiceImpl;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -22,34 +21,24 @@ public class UserController implements UserControllerInfo {
 
     private final UserServiceImpl userService;
 
-    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @GetMapping("/all")
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    /**
-     * status FOUND here is just for test. It will be changed later
-     * this method will get a authentication parameter later, but for now there will be no params
-     *
-     * @return current user
-     */
-    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/current")
-    public ResponseEntity<UserDTO> getCurrentUser() {
-        return new ResponseEntity<>(HttpStatus.FOUND);
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        return new ResponseEntity<>(userService.getCurrentUser(authentication), HttpStatus.FOUND);
     }
 
-    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @PatchMapping("{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
     }
 
-    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
@@ -57,7 +46,6 @@ public class UserController implements UserControllerInfo {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @PostMapping
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
