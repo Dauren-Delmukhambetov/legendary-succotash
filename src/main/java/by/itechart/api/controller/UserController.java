@@ -33,7 +33,14 @@ public class UserController implements UserControllerInfo {
         return new ResponseEntity<>(userService.getCurrentUser(authentication), HttpStatus.FOUND);
     }
 
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
+    @RolesAllowed("ROLE_USER")
+    @PatchMapping("/current")
+    public ResponseEntity<UserDTO> updateCurrentUser(Authentication authentication, @Valid @RequestBody UpdateUserDTO userDTO) {
+        UserDTO user = userService.getCurrentUser(authentication);
+        return new ResponseEntity<>(userService.update(user.getId(), userDTO), HttpStatus.OK);
+    }
+
+    @RolesAllowed("ROLE_ADMIN")
     @PatchMapping("{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDTO userDTO) {
         return new ResponseEntity<>(userService.update(id, userDTO), HttpStatus.OK);
@@ -47,7 +54,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @PostMapping
-    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }

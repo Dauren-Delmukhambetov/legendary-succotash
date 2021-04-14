@@ -67,10 +67,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getCurrentUser(Authentication authentication) {
-        Optional<Authentication> optionalAuthentication = Optional.ofNullable(authentication);
-        optionalAuthentication.orElseThrow(() -> new UserNotFoundException("User not found"));
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail(authentication.getName());
+        if (authentication == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        Optional<User> user = userRepository.findByEmail(authentication.getName());
+        UserDTO userDTO;
+        if (user.isPresent()) {
+            userDTO = convertToDTO(user.get());
+        } else {
+            throw new UserNotFoundException("User Not Found");
+        }
         return userDTO;
     }
 

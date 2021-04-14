@@ -43,6 +43,17 @@ public interface UserControllerInfo {
                                                UpdateUserDTO user);
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
+    @ApiOperation(value = "Update current user information partially or with full changes",
+            notes = "This method is used to change information in current user authenticated user")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully updated user"),
+            @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
+            @ApiResponse(code = 403, message = "Forbidden access to resource"),
+            @ApiResponse(code = 500, message = "Server error. Something went wrong")})
+    ResponseEntity<UserDTO> updateCurrentUser(Authentication authentication,
+                                              @ApiParam(value = "user information for update", required = true)
+                                                      UpdateUserDTO user);
+
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @ApiOperation(value = "Create new user", notes = "This method is used to create new user")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully created new user"),
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
