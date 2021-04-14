@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface UserControllerInfo {
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
-    @ApiOperation(value = "Get all users", notes = "This method will return all users from DB", authorizations = {
+    @ApiOperation(value = "Get all users", notes = "This method will return all users", authorizations = {
             @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
     })
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully returned all users"),
