@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 @Data
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
@@ -20,6 +22,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
-        return user.map(UserPrincipal::new).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return user.map(UserPrincipal::new)
+                .orElseThrow(() -> new UserNotFoundException(format("User with email %s is not found", username)));
     }
 }

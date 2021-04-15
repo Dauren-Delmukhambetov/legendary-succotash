@@ -6,6 +6,7 @@ import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.Role;
 import by.itechart.api.entity.User;
 import by.itechart.api.entity.UserRole;
+import by.itechart.api.exception.UserNotAuthenticatedException;
 import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
@@ -68,16 +71,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getCurrentUser(Authentication authentication) {
         if (authentication == null) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotAuthenticatedException("Unauthorized operation provided");
         }
         Optional<User> user = userRepository.findByEmail(authentication.getName());
-        UserDTO userDTO;
-        if (user.isPresent()) {
-            userDTO = convertToDTO(user.get());
-        } else {
-            throw new UserNotFoundException("User Not Found");
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(format("User with email %s is not found", authentication.getName()));
         }
-        return userDTO;
+        return convertToDTO(user.get());
     }
 
     private User convertToEntity(CreateUserDTO userDTO) {

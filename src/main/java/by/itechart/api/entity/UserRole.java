@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
 @Table(name = "user_roles")
 @ApiModel(value = "User role class")
 @NoArgsConstructor
-public class UserRole implements GrantedAuthority {
+public class UserRole implements GrantedAuthority, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
