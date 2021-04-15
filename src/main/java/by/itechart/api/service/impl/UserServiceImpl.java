@@ -6,17 +6,22 @@ import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.Role;
 import by.itechart.api.entity.User;
 import by.itechart.api.entity.UserRole;
+import by.itechart.api.exception.UserNotAuthenticatedException;
 import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +66,18 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll() {
         List<User> userList = userRepository.findAll();
         return userList.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            throw new UserNotAuthenticatedException("Unauthorized operation provided");
+        }
+        Optional<User> user = userRepository.findByEmail(authentication.getName());
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(format("User with email %s is not found", authentication.getName()));
+        }
+        return convertToDTO(user.get());
     }
 
     private User convertToEntity(CreateUserDTO userDTO) {
