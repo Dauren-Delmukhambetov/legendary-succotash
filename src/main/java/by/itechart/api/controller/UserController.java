@@ -3,7 +3,7 @@ package by.itechart.api.controller;
 import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
-import by.itechart.api.service.impl.UserServiceImpl;
+import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController implements UserControllerInfo {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/all")
     @RolesAllowed("ROLE_ADMIN")

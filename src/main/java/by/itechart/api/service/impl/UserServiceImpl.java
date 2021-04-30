@@ -37,9 +37,7 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
         createDefaultUserRole(user);
-        UserDTO userDTO = new UserDTO();
-        this.modelMapper.map(user, userDTO);
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override
