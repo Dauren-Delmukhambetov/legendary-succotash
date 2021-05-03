@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         this.modelMapper.map(userDTO, user);
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.saveAndFlush(user);
-        UserDTO returnedUser = new UserDTO();
+        var returnedUser = new UserDTO();
         this.modelMapper.map(user, returnedUser);
         return returnedUser;
     }
