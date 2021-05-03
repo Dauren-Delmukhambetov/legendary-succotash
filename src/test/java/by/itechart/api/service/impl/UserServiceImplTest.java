@@ -4,6 +4,8 @@ import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.User;
+import by.itechart.api.exception.UserNotAuthenticatedException;
+import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,10 +19,12 @@ import org.springframework.security.core.Authentication;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -47,14 +51,12 @@ class UserServiceImplTest {
         createUserDTO.setFirstName("karen");
         createUserDTO.setLastName("bagratyan");
         UserDTO resultDTO = userService.create(createUserDTO);
-        assertThat(resultDTO.getEmail()).isEqualTo(createUserDTO.getEmail());
-        assertThat(resultDTO.getFirstName()).isEqualTo(createUserDTO.getFirstName());
-        assertThat(resultDTO.getLastName()).isEqualTo(createUserDTO.getLastName());
+        verify(userRepository, times(1)).save(argumentCaptor.capture());
         verify(userRepository).save(any());
-        //1) initialize argument captor for user entity
-        //2) pass argument captor to verify method
-        //3) verify arguments values (UserEntity.getEmail()) against input data (CreateUserDTO.getEmail())
-        //TODO check how to do with argument captor
+        User userEntity = argumentCaptor.getValue();
+        assertThat(resultDTO.getFirstName()).isEqualTo(userEntity.getFirstName());
+        assertThat(resultDTO.getLastName()).isEqualTo(userEntity.getLastName());
+        assertThat(resultDTO.getEmail()).isEqualTo(userEntity.getEmail());
     }
 
     @DisplayName("Update existing user")
@@ -66,7 +68,7 @@ class UserServiceImplTest {
         userDTO.setFirstName("karen");
         userDTO.setLastName("bagratyan");
         User userEntity = new User();
-        when(userRepository.findById(id)).thenReturn(java.util.Optional.of(userEntity));
+        when(userRepository.findById(id)).thenReturn(of(userEntity));
         UserDTO resultUserDTO = userService.update(id, userDTO);
         assertThat(resultUserDTO.getEmail()).isEqualTo(userDTO.getEmail());
         assertThat(resultUserDTO.getFirstName()).isEqualTo(userDTO.getFirstName());
@@ -79,7 +81,7 @@ class UserServiceImplTest {
     void testDeleteExistingUser() {
         Long id = 1L;
         User userEntity = new User();
-        when(userRepository.findById(id)).thenReturn(java.util.Optional.of(userEntity));
+        when(userRepository.findById(id)).thenReturn(of(userEntity));
         userService.delete(id);
         assertThat(userEntity.getDeletedAt()).isNotNull();
     }
@@ -104,8 +106,58 @@ class UserServiceImplTest {
         userEntity.setEmail("karen@karen.by");
         userEntity.setFirstName("karen");
         userEntity.setLastName("bagratyan");
-        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userEntity));
+        when(userRepository.findByEmail(any())).thenReturn(of(userEntity));
         UserDTO expectedDTO = userService.getCurrentUser(authentication);
         assertThat(expectedDTO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Update user but user not found")
+    void testUpdateUser_UserNotFound_ExceptionThrown() {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
+            Long notExistedIDForUser = 2L;
+            UpdateUserDTO userDTO = new UpdateUserDTO();
+            userDTO.setEmail("karen@karen.by");
+            userDTO.setFirstName("karen");
+            userDTO.setLastName("bagratyan");
+            userService.update(notExistedIDForUser, userDTO);
+        });
+        String expectedMessage = "User with ID 2 is not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Delete user but user not found")
+    void testDeleteUser_UserNotFound_ExceptionThrown() {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
+            Long notExistedIDForUser = 2L;
+            userService.delete(notExistedIDForUser);
+        });
+        String expectedMessage = "User with ID 2 is not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Get current user but not found")
+    void testGetCurrentUser_UserNotFoundByEmail_ExceptionThrown() {
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
+            userService.getCurrentUser(authentication);
+        });
+        String expectedMessage = "User with email null is not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Get current user but not authenticated")
+    void testGetCurrentUser_UserNotAuthenticated_ExceptionThrown() {
+        Exception exception = assertThrows(UserNotAuthenticatedException.class, () -> {
+            userService.getCurrentUser(null);
+        });
+        String expectedMessage = "Unauthorized operation provided";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }
