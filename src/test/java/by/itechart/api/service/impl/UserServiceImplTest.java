@@ -114,14 +114,13 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Update user but user not found")
     void testUpdateUser_UserNotFound_ExceptionThrown() {
-        Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            Long notExistedIDForUser = 2L;
-            UpdateUserDTO userDTO = new UpdateUserDTO();
-            userDTO.setEmail("karen@karen.by");
-            userDTO.setFirstName("karen");
-            userDTO.setLastName("bagratyan");
-            userService.update(notExistedIDForUser, userDTO);
-        });
+        Long notExistedIDForUser = 2L;
+        UpdateUserDTO userDTO = new UpdateUserDTO();
+        userDTO.setEmail("karen@karen.by");
+        userDTO.setFirstName("karen");
+        userDTO.setLastName("bagratyan");
+        Exception exception = assertThrows(UserNotFoundException.class,
+                () -> userService.update(notExistedIDForUser, userDTO));
         String expectedMessage = "User with ID 2 is not found";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -130,10 +129,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Delete user but user not found")
     void testDeleteUser_UserNotFound_ExceptionThrown() {
-        Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            Long notExistedIDForUser = 2L;
-            userService.delete(notExistedIDForUser);
-        });
+        Long notExistedIDForUser = 2L;
+        Exception exception = assertThrows(UserNotFoundException.class, () -> userService.delete(notExistedIDForUser));
         String expectedMessage = "User with ID 2 is not found";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -142,9 +139,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get current user but not found")
     void testGetCurrentUser_UserNotFoundByEmail_ExceptionThrown() {
-        Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            userService.getCurrentUser(authentication);
-        });
+        Exception exception = assertThrows(UserNotFoundException.class,
+                () -> userService.getCurrentUser(authentication));
         String expectedMessage = "User with email null is not found";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -153,9 +149,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get current user but not authenticated")
     void testGetCurrentUser_UserNotAuthenticated_ExceptionThrown() {
-        Exception exception = assertThrows(UserNotAuthenticatedException.class, () -> {
-            userService.getCurrentUser(null);
-        });
+        Exception exception = assertThrows(UserNotAuthenticatedException.class,
+                () -> userService.getCurrentUser(null));
         String expectedMessage = "Unauthorized operation provided";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
