@@ -84,8 +84,7 @@ class UserServiceImplTest {
         List<User> suggestedAllUsers = List.of(new User(), new User());
         when(userRepository.findAll()).thenReturn(suggestedAllUsers);
         List<UserDTO> resultAllUsers = userService.findAll();
-        assertThat(resultAllUsers).isNotEmpty();
-        assertThat(resultAllUsers).size().isEqualTo(2);
+        assertThat(resultAllUsers).isNotEmpty().size().isEqualTo(2);
     }
 
     @Test
