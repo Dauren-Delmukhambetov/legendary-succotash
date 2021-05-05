@@ -33,12 +33,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.testng:testng:6.10', 'org.easytesting:fest-assert:1.4'
+	testImplementation 'org.mockito:mockito-core:3.7.0'
 	compileOnly 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
+	testCompile("org.assertj:assertj-core:3.11.1")
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
-	compileOnly('org.modelmapper:modelmapper:1.1.0')
+	implementation('org.modelmapper:modelmapper:1.1.0')
 	compileOnly('io.springfox:springfox-swagger2:3.0.0')
 	compileOnly('io.springfox:springfox-boot-starter:3.0.0')
 }

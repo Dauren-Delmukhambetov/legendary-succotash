@@ -33,30 +33,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(CreateUserDTO createUserDTO) {
-        User user = convertToEntity(createUserDTO);
+        var user = convertToEntity(createUserDTO);
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
         createDefaultUserRole(user);
-        UserDTO userDTO = new UserDTO();
-        this.modelMapper.map(user, userDTO);
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override
     public UserDTO update(Long id, UpdateUserDTO userDTO) {
-        User user = userRepository.findById(id)
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         this.modelMapper.map(userDTO, user);
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.saveAndFlush(user);
-        UserDTO returnedUser = new UserDTO();
+        var returnedUser = new UserDTO();
         this.modelMapper.map(user, returnedUser);
         return returnedUser;
     }
 
     @Override
     public void delete(Long id) {
-        User user = userRepository.findById(id)
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         user.setDeletedAt(LocalDateTime.now());
         userRepository.saveAndFlush(user);
@@ -89,7 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void createDefaultUserRole(User user) {
-        UserRole userRole = new UserRole();
+        var userRole = new UserRole();
         userRole.setRole(Role.USER);
         userRole.setUser(user);
         userRoleRepository.save(userRole);
