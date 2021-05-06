@@ -3,8 +3,9 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'org.sonarqube' version '3.1.1'
+	id 'jacoco'
+	id 'com.adarshr.test-logger' version '3.0.0'
 }
-
 
 group = 'by.itechart'
 version = '0.0.1-SNAPSHOT'
@@ -47,6 +48,23 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport  {
+	dependsOn test
+}
+
+jacoco {
+	toolVersion = "0.8.6"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.destination layout.buildDirectory.dir('jacocoHtml').get().asFile
+	}
 }
 
 sonarqube {
