@@ -14,6 +14,7 @@ import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,11 +31,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO create(CreateUserDTO createUserDTO) {
         var user = convertToEntity(createUserDTO);
         user.setCreatedAt(LocalDateTime.now());
+        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
         userRepository.save(user);
         createDefaultUserRole(user);
         return modelMapper.map(user, UserDTO.class);
