@@ -8,64 +8,91 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.testng.annotations.BeforeTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin@admin.com", roles = "ADMIN", password = "$2a$12$mbrKKshlIeJQNszD4KJSjeXCAZGbIMrcDG8qkiPkwTXy2G4dNXzrW")
-@Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = "/db.script/add_users_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@SqlGroup(
+        {
+                @Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+                @Sql(value = "/db.script/add_users_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        }
+)
 class UserControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private final Long USER_ID = 2L;
 
     @Test
-    @Sql("/db.script/add_users_before.sql")
     void getAllUsers() throws Exception {
-        this.mockMvc.perform(get("/users/all")).andDo(print()).andExpect(status().isOk());
-        //.andExpect(content().string(containsString("")))
+        this.mockMvc.perform(get("/users/all")).andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(2)));
     }
 
     @Test
     void getCurrentUser() throws Exception {
-        this.mockMvc.perform(get("/users/current")).andDo(print()).andExpect(status().is(302));
+        this.mockMvc.perform(get("/users/current")).andDo(print()).andExpect(status().is(302))
+                .andExpect(jsonPath("$.email", is("admin@admin.com")))
+                .andExpect(jsonPath("$.password", is("$2a$12$mbrKKshlIeJQNszD4KJSjeXCAZGbIMrcDG8qkiPkwTXy2G4dNXzrW")));
     }
 
     @Test
-    void updateCurrentUser() {
-        //TODO authentication?
+    void updateCurrentUser() throws Exception {
+        var updateUserDTO = getUpdateUserDTO();
+        this.mockMvc.perform(patch("/users/current")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateUserDTO))
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email", is("newemail@email.com")))
+                .andExpect(jsonPath("$.password", is("newPassword123")))
+                .andExpect(jsonPath("$.phone", is("3213213213")));
+        //TODO is this normal to check everything like that?
     }
 
     @Test
     void updateUser() throws Exception {
         var updateUserDTO = getUpdateUserDTO();
-        this.mockMvc.perform(patch("/users"));
-        //TODO id?
+        this.mockMvc.perform(patch("/users/{userID}", USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateUserDTO))
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email", is("newemail@email.com")))
+                .andExpect(jsonPath("$.password", is("newPassword123")))
+                .andExpect(jsonPath("$.phone", is("3213213213")));
+        //TODO password is encoded + not sure that check like that is normal
     }
 
     @Test
     void deleteUser() throws Exception {
-        this.mockMvc.perform(delete("/users").param("id", "2")).andDo(print())
+        this.mockMvc.perform(delete("/users/{userID}", USER_ID).with(csrf())).andDo(print())
                 .andExpect(status().isOk());
-        //something goes wrong
     }
 
     @Test
@@ -74,19 +101,18 @@ class UserControllerIT {
         this.mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createUserDTO))
-                .with(csrf())).andExpect(status().isCreated());
+                .with(csrf())).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email", is("email@email.com")))
+                .andExpect(jsonPath("$.password", is(passwordEncoder.encode("Password123"))))
+                .andExpect(jsonPath("$.phone", is("1231231231")));
+        //TODO wrong encode
+        //TODO rename sql scripts
     }
-
 
     @Test
     public void contextLoads() throws Exception {
         assertThat(mockMvc).isNotNull();
         assertThat(context).isNotNull();
-    }
-
-    @BeforeTest
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
     private CreateUserDTO getCreateUserDTO() {
@@ -104,5 +130,4 @@ class UserControllerIT {
         updateUserDTO.setPhone("3213213213");
         return updateUserDTO;
     }
-
 }

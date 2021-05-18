@@ -1,4 +1,2 @@
-DELETE
-FROM user_roles;
-DELETE
-FROM users;
+TRUNCATE user_roles CASCADE;
+TRUNCATE users CASCADE;
