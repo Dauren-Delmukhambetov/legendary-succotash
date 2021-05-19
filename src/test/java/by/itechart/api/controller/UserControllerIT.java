@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -27,12 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin@admin.com", roles = "ADMIN", password = "$2a$12$mbrKKshlIeJQNszD4KJSjeXCAZGbIMrcDG8qkiPkwTXy2G4dNXzrW")
-@SqlGroup(
-        {
-                @Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-                @Sql(value = "/db.script/add_users_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-        }
-)
+@SqlGroup({
+        @Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+        @Sql(value = "/db.script/delete_all_data_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+})
 class UserControllerIT {
 
     @Autowired
@@ -41,22 +38,19 @@ class UserControllerIT {
     private WebApplicationContext context;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private final Long USER_ID = 2L;
 
     @Test
     void getAllUsers() throws Exception {
         this.mockMvc.perform(get("/users/all")).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(2)));
+                .andExpect(jsonPath("$.*.id", hasSize(2)));
     }
 
     @Test
     void getCurrentUser() throws Exception {
         this.mockMvc.perform(get("/users/current")).andDo(print()).andExpect(status().is(302))
-                .andExpect(jsonPath("$.email", is("admin@admin.com")))
-                .andExpect(jsonPath("$.password", is("$2a$12$mbrKKshlIeJQNszD4KJSjeXCAZGbIMrcDG8qkiPkwTXy2G4dNXzrW")));
+                .andExpect(jsonPath("$.email", is("admin@admin.com")));
     }
 
     @Test
@@ -69,9 +63,7 @@ class UserControllerIT {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email", is("newemail@email.com")))
-                .andExpect(jsonPath("$.password", is("newPassword123")))
                 .andExpect(jsonPath("$.phone", is("3213213213")));
-        //TODO is this normal to check everything like that?
     }
 
     @Test
@@ -84,9 +76,7 @@ class UserControllerIT {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email", is("newemail@email.com")))
-                .andExpect(jsonPath("$.password", is("newPassword123")))
                 .andExpect(jsonPath("$.phone", is("3213213213")));
-        //TODO password is encoded + not sure that check like that is normal
     }
 
     @Test
@@ -103,14 +93,11 @@ class UserControllerIT {
                 .content(objectMapper.writeValueAsString(createUserDTO))
                 .with(csrf())).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email", is("email@email.com")))
-                .andExpect(jsonPath("$.password", is(passwordEncoder.encode("Password123"))))
                 .andExpect(jsonPath("$.phone", is("1231231231")));
-        //TODO wrong encode
-        //TODO rename sql scripts
     }
 
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         assertThat(mockMvc).isNotNull();
         assertThat(context).isNotNull();
     }
