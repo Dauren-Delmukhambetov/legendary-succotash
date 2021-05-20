@@ -97,7 +97,7 @@ class UserControllerIT {
     }
 
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         assertThat(mockMvc).isNotNull();
         assertThat(context).isNotNull();
     }
