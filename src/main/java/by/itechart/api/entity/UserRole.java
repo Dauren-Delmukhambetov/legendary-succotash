@@ -1,15 +1,19 @@
 package by.itechart.api.entity;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode
 @Table(name = "user_roles")
 @ApiModel(value = "User role class")
 @NoArgsConstructor
@@ -28,5 +32,13 @@ public class UserRole implements GrantedAuthority, Serializable {
     @Override
     public String getAuthority() {
         return "ROLE_" + role;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "id=" + id +
+                ", role=" + role +
+                '}';
     }
 }
