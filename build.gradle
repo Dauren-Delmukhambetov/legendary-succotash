@@ -42,8 +42,8 @@ dependencies {
 	testCompile("org.assertj:assertj-core:3.11.1")
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	implementation('org.modelmapper:modelmapper:1.1.0')
-	compileOnly('io.springfox:springfox-swagger2:3.0.0')
-	compileOnly('io.springfox:springfox-boot-starter:3.0.0')
+	implementation('io.springfox:springfox-swagger2:3.0.0')
+	implementation('io.springfox:springfox-boot-starter:3.0.0')
 }
 
 test {

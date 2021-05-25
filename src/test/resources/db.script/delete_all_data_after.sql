@@ -1,0 +1,2 @@
+TRUNCATE user_roles CASCADE;
+TRUNCATE users CASCADE;

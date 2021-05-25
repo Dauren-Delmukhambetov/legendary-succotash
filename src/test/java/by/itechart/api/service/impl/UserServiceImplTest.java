@@ -15,6 +15,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ class UserServiceImplTest {
     UserRepository userRepository;
     @Mock
     UserRoleRepository userRoleRepository;
+    @Mock
+    PasswordEncoder passwordEncoder;
     @Spy
     ModelMapper modelMapper;
     @Captor

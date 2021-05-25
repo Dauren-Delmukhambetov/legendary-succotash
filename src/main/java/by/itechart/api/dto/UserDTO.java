@@ -1,9 +1,12 @@
 package by.itechart.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static io.swagger.annotations.ApiModelProperty.AccessMode.READ_ONLY;
 
 @NoArgsConstructor
 @Data
@@ -14,7 +17,7 @@ public class UserDTO {
             name = "id",
             dataType = "Long",
             example = "19485",
-            readOnly = true)
+            accessMode = READ_ONLY)
     Long id;
 
     @ApiModelProperty(
@@ -39,6 +42,7 @@ public class UserDTO {
             required = true)
     String email;
 
+    @JsonIgnore
     @ApiModelProperty(
             notes = "User's password should not be exposed",
             hidden = true)
