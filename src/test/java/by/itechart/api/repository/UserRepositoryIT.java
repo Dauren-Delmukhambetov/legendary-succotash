@@ -13,10 +13,9 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-//TODO choose more appropriate name and package level and check optional for testing
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class JPATest {
+public class UserRepositoryIT {
 
     @Autowired
     private TestEntityManager testEntityManager;
@@ -52,8 +51,9 @@ public class JPATest {
     void shouldFindUserById() {
         var user = createSimpleUserEntity();
         testEntityManager.persist(user);
-        var foundUser = userRepository.findById(user.getId()).get();
-        assertThat(foundUser).isEqualTo(user);
+        var foundUser = userRepository.findById(user.getId());
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get()).isEqualTo(user);
     }
 
     @Test
@@ -77,18 +77,19 @@ public class JPATest {
     void shouldUpdateUserById() {
         var user = createSimpleUserEntity();
         testEntityManager.persist(user);
-        var userToBeUpdated = userRepository.findById(user.getId()).get();
-        userToBeUpdated.setEmail("testNew@test.com");
-        userToBeUpdated.setUpdatedAt(LocalDateTime.now());
-        userRepository.save(userToBeUpdated);
-        var checkUpdatedUser = userRepository.findById(user.getId()).get();
-        assertThat(checkUpdatedUser.getId()).isEqualTo(user.getId());
-        assertThat(checkUpdatedUser.getEmail()).isEqualTo(user.getEmail());
+        var userToBeUpdated = userRepository.findById(user.getId());
+        assertThat(userToBeUpdated).isPresent();
+        userToBeUpdated.get().setEmail("testNew@test.com");
+        userToBeUpdated.get().setUpdatedAt(LocalDateTime.now());
+        userRepository.save(userToBeUpdated.get());
+        var checkUpdatedUser = userRepository.findById(user.getId());
+        assertThat(checkUpdatedUser).isPresent();
+        assertThat(checkUpdatedUser.get().getId()).isEqualTo(user.getId());
+        assertThat(checkUpdatedUser.get().getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
     void shouldDeleteUserById() {
-        //TODO check does I need to test deletion or check deletedAt field
         var user1 = createUserEntityWithParameters("testOne@test.com", "testNameOne");
         var user2 = createUserEntityWithParameters("testTwo@test.com", "testNameTwo");
         var user3 = createUserEntityWithParameters("testThree@test.com", "testNameThree");

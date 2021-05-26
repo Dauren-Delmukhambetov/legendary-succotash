@@ -6,6 +6,7 @@ import by.itechart.api.dto.UserDTO;
 import by.itechart.api.entity.Role;
 import by.itechart.api.entity.User;
 import by.itechart.api.entity.UserRole;
+import by.itechart.api.exception.UserEmailDuplicationException;
 import by.itechart.api.exception.UserNotAuthenticatedException;
 import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
@@ -35,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(CreateUserDTO createUserDTO) {
+        var fetchedUserWithThisEmail = userRepository.findByEmail(createUserDTO.getEmail());
+        fetchedUserWithThisEmail.ifPresent(user -> {
+            throw new UserEmailDuplicationException("User with this email is already exists");
+        });
         var user = convertToEntity(createUserDTO);
         user.setCreatedAt(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
