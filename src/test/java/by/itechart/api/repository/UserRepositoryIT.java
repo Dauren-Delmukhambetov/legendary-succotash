@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class UserRepositoryIT {
+class UserRepositoryIT {
 
     @Autowired
     private TestEntityManager testEntityManager;
@@ -31,8 +31,8 @@ public class UserRepositoryIT {
     @Test
     void shouldStoreUser() {
         var user = userRepository.save(createSimpleUserEntity());
-        assertThat(user).hasFieldOrPropertyWithValue("firstName", "testName");
-        assertThat(user).hasFieldOrPropertyWithValue("email", "test@test.com");
+        assertThat(user).hasFieldOrPropertyWithValue("firstName", "testName")
+                .hasFieldOrPropertyWithValue("email", "test@test.com");
     }
 
     @Test
@@ -53,7 +53,7 @@ public class UserRepositoryIT {
         testEntityManager.persist(user);
         var foundUser = userRepository.findById(user.getId());
         assertThat(foundUser).isPresent();
-        assertThat(foundUser.get()).isEqualTo(user);
+        assertThat(user).isEqualTo(foundUser.get());
     }
 
     @Test
