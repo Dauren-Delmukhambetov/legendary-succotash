@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO create(CreateUserDTO createUserDTO) {
         var fetchedUserWithThisEmail = userRepository.findByEmail(createUserDTO.getEmail());
         fetchedUserWithThisEmail.ifPresent(user -> {
-            throw new UserEmailDuplicationException("User with this email is already exists");
+            throw new UserEmailDuplicationException(createUserDTO.getEmail());
         });
         var user = convertToEntity(createUserDTO);
         user.setCreatedAt(LocalDateTime.now());

@@ -2,7 +2,6 @@ package by.itechart.api.controller;
 
 import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
-import by.itechart.api.exception.UserEmailDuplicationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -128,24 +125,20 @@ class UserControllerIT {
     }
 
     @Test
+    @SqlGroup({
+            @Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(value = "/db.script/insert_simple_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(value = "/db.script/delete_all_data_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
     void shouldThrowEmailDuplicationExceptionWhenUserWithEmailExists() throws Exception {
-        var createUserOne = getCreateUserDTO();
         var createUserTwo = getCreateUserDTO();
         this.mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createUserOne))
-                .with(httpBasic(ADMIN_USERNAME, ADMIN_AND_USER_PASSWORD))
-                .with(csrf()))
-                .andExpect(status().isCreated());
-        Exception resolvedException = this.mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createUserTwo))
                 .with(httpBasic(ADMIN_USERNAME, ADMIN_AND_USER_PASSWORD))
                 .with(csrf()))
                 .andExpect(status().isBadRequest())
-                .andReturn().getResolvedException();
-        assertTrue(resolvedException instanceof UserEmailDuplicationException);
-        assertEquals("User with this email is already exists", resolvedException.getMessage());
+                .andExpect(jsonPath("$.message", is("User with email@email.com email is already exists")));
     }
 
     @Test
