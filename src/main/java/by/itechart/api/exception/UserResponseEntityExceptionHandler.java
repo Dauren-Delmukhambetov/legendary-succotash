@@ -30,8 +30,7 @@ public class UserResponseEntityExceptionHandler extends
     @ExceptionHandler(UserEmailDuplicationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ExceptionInfo handleUserDuplicationException(UserEmailDuplicationException ex) {
-        String bodyOfResponse = ex.getMessage();
-        return new ExceptionInfo(bodyOfResponse);
+        return new ExceptionInfo(ex.getMessage());
     }
 
     @Override
