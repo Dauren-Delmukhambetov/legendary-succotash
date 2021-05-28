@@ -26,6 +26,13 @@ public class UserResponseEntityExceptionHandler extends
         return new ExceptionInfo(bodyOfResponse);
     }
 
+    @ResponseBody
+    @ExceptionHandler(UserEmailDuplicationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ExceptionInfo handleUserDuplicationException(UserEmailDuplicationException ex) {
+        return new ExceptionInfo(ex.getMessage());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errorList = ex

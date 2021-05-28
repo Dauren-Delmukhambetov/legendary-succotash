@@ -125,6 +125,23 @@ class UserControllerIT {
     }
 
     @Test
+    @SqlGroup({
+            @Sql(value = "/db.script/add_users_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(value = "/db.script/insert_simple_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(value = "/db.script/delete_all_data_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
+    void shouldThrowEmailDuplicationExceptionWhenUserWithEmailExists() throws Exception {
+        var createUserTwo = getCreateUserDTO();
+        this.mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createUserTwo))
+                .with(httpBasic(ADMIN_USERNAME, ADMIN_AND_USER_PASSWORD))
+                .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is("User with email@email.com email is already exists")));
+    }
+
+    @Test
     void contextLoads() {
         assertThat(mockMvc).isNotNull();
         assertThat(context).isNotNull();
