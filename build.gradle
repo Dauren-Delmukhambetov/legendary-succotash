@@ -61,7 +61,7 @@ jacoco {
 
 jacocoTestReport {
 	reports {
-		xml.enabled false
+		xml.enabled true
 		csv.enabled false
 		html.destination layout.buildDirectory.dir('jacocoHtml').get().asFile
 	}
@@ -72,5 +72,6 @@ sonarqube {
 		property "sonar.projectKey", "Dauren-Delmukhambetov_legendary-succotash"
 		property "sonar.organization", "dauren-delmukhambetov"
 		property "sonar.host.url", "https://sonarcloud.io"
+		property("sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exe")
 	}
 }
