@@ -6,6 +6,7 @@ import by.itechart.api.dto.UserDTO;
 import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -20,7 +21,7 @@ public interface UserControllerInfo {
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
-    ResponseEntity<List<UserDTO>> getAllUsers();
+    ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable);
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @ApiOperation(value = "Get current user", notes = "This method will return current user")

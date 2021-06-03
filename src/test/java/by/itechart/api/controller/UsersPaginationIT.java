@@ -1,6 +1,5 @@
 package by.itechart.api.controller;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +32,7 @@ class UsersPaginationIT {
     private final String ADMIN_USERNAME = "admin@admin.com";
     private final String ADMIN_PASSWORD = "Password123";
 
-    @Disabled
+
     @Test
     @DisplayName("Should return first page with ten items when no page is defined in request")
     void getFirstPage() throws Exception {
@@ -52,7 +47,7 @@ class UsersPaginationIT {
                 .andExpect(jsonPath("$.[-1:].lastName", contains("Friedman")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should return second page with three items when page and pageSize are defined in request")
     void getSecondPage() throws Exception {
@@ -67,7 +62,7 @@ class UsersPaginationIT {
                 .andExpect(jsonPath("$.[-1:].email", contains("jean-baptiste.say@gmail.com")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should return last page with leftovers when only page is defined in request")
     void getLastPage() throws Exception {
@@ -76,13 +71,13 @@ class UsersPaginationIT {
                 .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*.id", hasSize(13)))
+                .andExpect(jsonPath("$.*.id", hasSize(3)))
                 .andExpect(jsonPath("$.[0].firstName", is("Robert")))
                 .andExpect(jsonPath("$.[1].lastName", nullValue()))
                 .andExpect(jsonPath("$.[-1:].email", contains("user@user.com")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should return first page with only active users when no page is defined in request")
     void getFirstPageOfActiveUsers() throws Exception {
@@ -97,7 +92,7 @@ class UsersPaginationIT {
                 .andExpect(jsonPath("$.[-1:].lastName", contains("Lucas Jr.")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should return specific page when both page and pageSize are defined in request")
     void getSpecificPageOfActiveUsers() throws Exception {
@@ -109,7 +104,7 @@ class UsersPaginationIT {
                 .andExpect(jsonPath("$.*.id", hasSize(1)))
                 .andExpect(jsonPath("$.[0].firstName", equalToIgnoringCase("milton")))
                 .andExpect(jsonPath("$.[0].phone", nullValue()))
-                .andExpect(jsonPath("$.[0].email", contains("milton.friedman@gmail.com")));
+                .andExpect(jsonPath("$.[0].email", containsString("milton.friedman@gmail.com")));
     }
 
 }

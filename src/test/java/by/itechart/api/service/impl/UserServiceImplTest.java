@@ -14,6 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -85,8 +89,9 @@ class UserServiceImplTest {
     @DisplayName("Find all users")
     void testFindAllUsers() {
         List<User> suggestedAllUsers = List.of(new User(), new User());
-        when(userRepository.findAll()).thenReturn(suggestedAllUsers);
-        List<UserDTO> resultAllUsers = userService.findAll();
+        Page<User> pages = new PageImpl<>(suggestedAllUsers);
+        when(userRepository.findAll(PageRequest.of(1, 10, Sort.by("firstName")))).thenReturn(pages);
+        List<UserDTO> resultAllUsers = userService.findAll(PageRequest.of(1, 10, Sort.by("firstName")));
         assertThat(resultAllUsers).isNotEmpty().size().isEqualTo(2);
     }
 
