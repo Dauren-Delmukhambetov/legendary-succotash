@@ -89,7 +89,7 @@ class UserServiceImplTest {
     @DisplayName("Find all users")
     void testFindAllUsers() {
         List<User> suggestedAllUsers = List.of(new User(), new User());
-        Page<User> pages = new PageImpl<>(suggestedAllUsers);
+        Page<User> page = new PageImpl<>(suggestedAllUsers);
         when(userRepository.findAll(PageRequest.of(1, 10, Sort.by("firstName")))).thenReturn(pages);
         List<UserDTO> resultAllUsers = userService.findAll(PageRequest.of(1, 10, Sort.by("firstName")));
         assertThat(resultAllUsers).isNotEmpty().size().isEqualTo(2);
