@@ -14,6 +14,8 @@ import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,9 +71,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findAll() {
-        List<User> userList = userRepository.findAll();
-        return userList.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public List<UserDTO> findAll(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> findAllActiveUsers(Pageable pageable) {
+        Page<User> userPage = userRepository.findByDeletedAtIsNull(pageable);
+        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override

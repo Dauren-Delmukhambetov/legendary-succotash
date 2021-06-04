@@ -3,6 +3,7 @@ package by.itechart.api.service;
 import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -14,7 +15,10 @@ public interface UserService {
 
     void delete(Long id);
 
-    List<UserDTO> findAll();
+    List<UserDTO> findAll(Pageable pageable);
 
     UserDTO getCurrentUser(Authentication authentication);
+
+    List<UserDTO> findAllActiveUsers(Pageable pageable);
+
 }
