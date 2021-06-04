@@ -28,7 +28,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.anyRequest().permitAll()
                 .and()
                 .httpBasic();
-        //http.csrf().disable();
+        /*http.csrf().csrfTokenRepository(new CsrfTokenRepository() {
+            @Override
+            public CsrfToken generateToken(HttpServletRequest request) {
+                return new DefaultCsrfToken("X-CSRF-TOKEN", "token", "123");
+            }
+
+            @Override
+            public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
+
+            }
+
+            @Override
+            public CsrfToken loadToken(HttpServletRequest request) {
+                return new DefaultCsrfToken("X-CSRF-TOKEN", "token", "123");
+            }
+        });*/
     }
 
     @Bean
