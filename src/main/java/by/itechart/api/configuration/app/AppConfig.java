@@ -13,6 +13,12 @@ public class AppConfig {
         return new LocalValidatorFactoryBean();
     }
 
+    /**
+     * This bean changes the default parameter name of page size in the Pageable interface
+     * that is passed in the controller. Also, this bean changes the default behavior of page indexes passed in URL path.
+     * By default, to rich the first page, we need to use 0 index in the path.
+     * But with setOneIndexedParameters we can reach the first page with 1 index, which is more user-friendly.
+     */
     @Bean
     PageableHandlerMethodArgumentResolverCustomizer pageableResolverCustomizer() {
         return pageableResolver -> {

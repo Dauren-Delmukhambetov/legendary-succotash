@@ -90,9 +90,10 @@ class UserServiceImplTest {
     void testFindAllUsers() {
         List<User> suggestedAllUsers = List.of(new User(), new User());
         Page<User> page = new PageImpl<>(suggestedAllUsers);
-        when(userRepository.findAll(PageRequest.of(1, 10, Sort.by("firstName")))).thenReturn(pages);
-        List<UserDTO> resultAllUsers = userService.findAll(PageRequest.of(1, 10, Sort.by("firstName")));
-        assertThat(resultAllUsers).isNotEmpty().size().isEqualTo(2);
+        var pageRequestWithFirstNameSort = PageRequest.of(1, 10, Sort.by("firstName"));
+        when(userRepository.findAll(pageRequestWithFirstNameSort)).thenReturn(page);
+        List<UserDTO> resultAllUsers = userService.findAll(pageRequestWithFirstNameSort);
+        assertThat(resultAllUsers).size().isEqualTo(2);
     }
 
     @Test
