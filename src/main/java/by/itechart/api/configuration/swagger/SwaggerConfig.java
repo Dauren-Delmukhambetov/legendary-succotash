@@ -38,11 +38,4 @@ public class SwaggerConfig {
                 .build();
     }
 
-    /*@Bean
-    SecurityConfiguration security() {
-        return SecurityConfigurationBuilder.builder()
-                .useBasicAuthenticationWithAccessCodeGrant(true)
-                .enableCsrfSupport(true)
-                .build();
-    }*/
 }
