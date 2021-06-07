@@ -23,27 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf()
+                .requireCsrfProtectionMatcher(new CsrfRequireMatcher())
+                .and()
                 .authorizeRequests()
                 .mvcMatchers("/users").authenticated()
                 //.anyRequest().permitAll()
                 .and()
                 .httpBasic();
-        /*http.csrf().csrfTokenRepository(new CsrfTokenRepository() {
-            @Override
-            public CsrfToken generateToken(HttpServletRequest request) {
-                return new DefaultCsrfToken("X-CSRF-TOKEN", "token", "123");
-            }
-
-            @Override
-            public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
-
-            }
-
-            @Override
-            public CsrfToken loadToken(HttpServletRequest request) {
-                return new DefaultCsrfToken("X-CSRF-TOKEN", "token", "123");
-            }
-        });*/
     }
 
     @Bean
@@ -57,3 +44,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(12);
     }
 }
+
