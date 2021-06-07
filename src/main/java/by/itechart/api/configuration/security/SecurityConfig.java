@@ -23,12 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf()
+                .requireCsrfProtectionMatcher(new CsrfRequireMatcher())
+                .and()
                 .authorizeRequests()
                 .mvcMatchers("/users").authenticated()
                 //.anyRequest().permitAll()
                 .and()
                 .httpBasic();
-        //http.csrf().disable();
     }
 
     @Bean
@@ -42,3 +44,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(12);
     }
 }
+

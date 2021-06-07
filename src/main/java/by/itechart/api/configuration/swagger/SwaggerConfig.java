@@ -32,9 +32,10 @@ public class SwaggerConfig {
 
     private ApiInfo userApiAppInfo() {
         return new ApiInfoBuilder()
-            .title("UserApi App")
-            .description("Mentoring JAVA project by Dauren Delmukhambetov")
-            .termsOfServiceUrl("https://www.itechart.by")
-            .build();
+                .title("UserApi App")
+                .description("Mentoring JAVA project by Dauren Delmukhambetov")
+                .termsOfServiceUrl("https://www.itechart.by")
+                .build();
     }
+
 }
