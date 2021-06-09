@@ -36,35 +36,38 @@ public class UserFilteringIT {
 
     @Disabled
     @Test
-    @DisplayName("Should get all users with specific firstname")
+    @DisplayName("Should get two users with specific filtering keyword 'am' ")
     void getUsersWithSpecificFirstname() throws Exception {
-        this.mockMvc.perform(get("/users/all?firstname={firstname}", "Robert")
+        this.mockMvc.perform(get("/users/all?keyword={keyword}", "am")
                 .with(csrf())
                 .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*.id", hasSize(1)))
-                .andExpect(jsonPath("$.[0].firstName", is("Robert")));
+                .andExpect(jsonPath("$.*.id", hasSize(2)))
+                .andExpect(jsonPath("$.[0].firstName", is("Adam")))
+                .andExpect(jsonPath("$.[1].lastName", is("Bentham")));
     }
 
     @Disabled
     @Test
-    @DisplayName("Should get all users with specific firstname, lastname")
+    @DisplayName("Should get first page with 10 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndLastname() throws Exception {
         this.mockMvc.perform
-                (get("/users/all?firstname={firstname}&lastname={lastname}", "Robert", "Marshall")
+                (get("/users/all?keyword={keyword}", "com")
                         .with(csrf())
                         .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*.id", hasSize(2)))
-                .andExpect(jsonPath("$.[0].firstName", is("Robert")))
-                .andExpect(jsonPath("$.[1].lastName", is("Marshall")));
+                .andExpect(jsonPath("$.*.id", hasSize(10)))
+                .andExpect(jsonPath("$.[0].firstName", is("Adam")))
+                .andExpect(jsonPath("$.[1].lastName", is("Locke")))
+                .andExpect(jsonPath("$.[2].email", is("david.ricardo@gmail.com")))
+                .andExpect(jsonPath("$.[-1].lastName", is("Lucas Jr.")));
     }
 
     @Disabled
     @Test
-    @DisplayName("Should get all users with specific firstname and email")
+    @DisplayName("Should get second page with 3 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndEmail() throws Exception {
         this.mockMvc.perform
                 (get("/users/all?firstname={firstname}&email={email}",
@@ -73,10 +76,9 @@ public class UserFilteringIT {
                         .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*.id", hasSize(2)))
-                .andExpect(jsonPath("$.[0].firstName", is("Jeremy")))
-                .andExpect(jsonPath("$.[1].email", is("milton.friedman@gmail.com")));
+                .andExpect(jsonPath("$.*.id", hasSize(3)))
+                .andExpect(jsonPath("$.[0].firstName", is("Bentham")))
+                .andExpect(jsonPath("$.[0].email", is("jeremy.bentham@gmail.com")));
     }
 
-    //TODO check does it need to pass all parameters for email and multiple user's firstname
 }
