@@ -12,6 +12,7 @@ import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.service.UserService;
+import by.itechart.api.util.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -71,9 +72,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findAll(Pageable pageable) {
-        Page<User> userPage = userRepository.findAll(pageable);
+    public List<UserDTO> findAll(Pageable pageable, String keyword) {
+        UserSpecification userSpecification = new UserSpecification(keyword);
+        Page<User> userPage = userRepository.findAll(userSpecification, pageable);
         return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+
     }
 
     @Override

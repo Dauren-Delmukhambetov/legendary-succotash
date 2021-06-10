@@ -34,7 +34,7 @@ public class UserFilteringIT {
     private final String ADMIN_USERNAME = "admin@admin.com";
     private final String ADMIN_PASSWORD = "Password123";
 
-    @Disabled
+
     @Test
     @DisplayName("Should get two users with specific filtering keyword 'am' ")
     void getUsersWithSpecificFirstname() throws Exception {
@@ -70,15 +70,30 @@ public class UserFilteringIT {
     @DisplayName("Should get second page with 3 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndEmail() throws Exception {
         this.mockMvc.perform
-                (get("/users/all?firstname={firstname}&email={email}",
-                        "Jeremy", "milton.friedman@gmail.com")
+                (get("/users/all?keyword={keyword}&page={page}", "com", 2)
                         .with(csrf())
                         .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(3)))
-                .andExpect(jsonPath("$.[0].firstName", is("Bentham")))
-                .andExpect(jsonPath("$.[0].email", is("jeremy.bentham@gmail.com")));
+                .andExpect(jsonPath("$.[0].firstName", is("Robert")))
+                .andExpect(jsonPath("$.[2].email", is("user@user.com")));
+    }
+
+    @Disabled
+    @Test
+    @DisplayName("Should get active users with specific filtering keyword")
+    void getActiveUsersWithSpecificUsernameSortedByLastname() throws Exception {
+        this.mockMvc.perform
+                (get("/users?keyword={keyword}&page={page}&pageSize={pageSize}&sort={sort}",
+                        "joh", 2, 1, "lastName,DESC")
+                        .with(csrf())
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*.id", hasSize(1)))
+                .andExpect(jsonPath("$.[0].lastName", is("Locke")))
+                .andExpect(jsonPath("$.[0].email", is("john.locke@gmail.com")));
     }
 
 }

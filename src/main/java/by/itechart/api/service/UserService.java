@@ -15,7 +15,7 @@ public interface UserService {
 
     void delete(Long id);
 
-    List<UserDTO> findAll(Pageable pageable);
+    List<UserDTO> findAll(Pageable pageable, String keyword);
 
     UserDTO getCurrentUser(Authentication authentication);
 
