@@ -8,8 +8,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class UserSpecification implements Specification<User> {
     private final String keyword;
@@ -23,17 +21,9 @@ public class UserSpecification implements Specification<User> {
         if (ObjectUtils.isEmpty(keyword)) {
             return null;
         } else {
-            return criteriaBuilder.like(root.get("firstName"), "%" + keyword + "%");
+            return criteriaBuilder.or(criteriaBuilder.like((root.get("firstName")), "%" + keyword + "%"),
+                    criteriaBuilder.like(root.get("lastName"), "%" + keyword + "%"),
+                    criteriaBuilder.like(root.get("email"), "%" + keyword + "%"));
         }
-    }
-
-
-    //FIXME not working
-    private Map<String, String> attributeMap(String keyword) {
-        Map<String, String> map = new ConcurrentHashMap<>();
-        map.put("firstName", keyword);
-        map.put("lastName", keyword);
-        map.put("email", keyword);
-        return map;
     }
 }

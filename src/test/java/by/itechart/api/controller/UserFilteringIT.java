@@ -35,6 +35,7 @@ public class UserFilteringIT {
     private final String ADMIN_PASSWORD = "Password123";
 
 
+
     @Test
     @DisplayName("Should get two users with specific filtering keyword 'am' ")
     void getUsersWithSpecificFirstname() throws Exception {
@@ -48,7 +49,7 @@ public class UserFilteringIT {
                 .andExpect(jsonPath("$.[1].lastName", is("Bentham")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should get first page with 10 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndLastname() throws Exception {
@@ -60,12 +61,12 @@ public class UserFilteringIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(10)))
                 .andExpect(jsonPath("$.[0].firstName", is("Adam")))
-                .andExpect(jsonPath("$.[1].lastName", is("Locke")))
+                .andExpect(jsonPath("$.[1].lastName", is("Marshall")))
                 .andExpect(jsonPath("$.[2].email", is("david.ricardo@gmail.com")))
-                .andExpect(jsonPath("$.[-1].lastName", is("Lucas Jr.")));
+                .andExpect(jsonPath("$.[-1].lastName", is("Friedman")));
     }
 
-    @Disabled
+
     @Test
     @DisplayName("Should get second page with 3 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndEmail() throws Exception {

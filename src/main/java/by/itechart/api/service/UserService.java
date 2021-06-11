@@ -19,6 +19,6 @@ public interface UserService {
 
     UserDTO getCurrentUser(Authentication authentication);
 
-    List<UserDTO> findAllActiveUsers(Pageable pageable);
+    List<UserDTO> findAllActiveUsers(Pageable pageable, String keyword);
 
 }

@@ -25,8 +25,8 @@ public class UserController implements UserControllerInfo {
 
     @GetMapping
     @RolesAllowed("ROLE_ADMIN")
-    public ResponseEntity<List<UserDTO>> getActiveUsers(@PageableDefault(sort = "firstName") Pageable pageable) {
-        return new ResponseEntity<>(userService.findAllActiveUsers(pageable), HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getActiveUsers(@PageableDefault(sort = "firstName") Pageable pageable, @RequestParam String keyword) {
+        return new ResponseEntity<>(userService.findAllActiveUsers(pageable, keyword), HttpStatus.OK);
     }
 
     @GetMapping("/all")
