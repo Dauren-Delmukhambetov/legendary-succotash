@@ -81,10 +81,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAllActiveUsers(Pageable pageable, String keyword) {
-        UserSpecification userSpecification = new UserSpecification(keyword);
+        UserSpecification userSpecification = new UserSpecification(keyword, true);
         Page<User> userPage = userRepository.findAll(userSpecification, pageable);
-        Page<User> test = userRepository.findByDeletedAtIsNull(userPage.getPageable());
-        return test.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override

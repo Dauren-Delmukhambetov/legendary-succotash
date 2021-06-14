@@ -1,6 +1,5 @@
 package by.itechart.api.controller;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,6 @@ public class UserFilteringIT {
     private final String ADMIN_PASSWORD = "Password123";
 
 
-
     @Test
     @DisplayName("Should get two users with specific filtering keyword 'am' ")
     void getUsersWithSpecificFirstname() throws Exception {
@@ -53,10 +51,9 @@ public class UserFilteringIT {
     @Test
     @DisplayName("Should get first page with 10 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndLastname() throws Exception {
-        this.mockMvc.perform
-                (get("/users/all?keyword={keyword}", "com")
-                        .with(csrf())
-                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
+        this.mockMvc.perform(get("/users/all?keyword={keyword}", "com")
+                .with(csrf())
+                .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(10)))
@@ -70,10 +67,9 @@ public class UserFilteringIT {
     @Test
     @DisplayName("Should get second page with 3 users with specific filtering keyword 'com' ")
     void getUsersWithSpecificFirstnameAndEmail() throws Exception {
-        this.mockMvc.perform
-                (get("/users/all?keyword={keyword}&page={page}", "com", 2)
-                        .with(csrf())
-                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
+        this.mockMvc.perform(get("/users/all?keyword={keyword}&page={page}", "com", 2)
+                .with(csrf())
+                .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(3)))
@@ -81,20 +77,19 @@ public class UserFilteringIT {
                 .andExpect(jsonPath("$.[2].email", is("user@user.com")));
     }
 
-    @Disabled
     @Test
     @DisplayName("Should get active users with specific filtering keyword")
     void getActiveUsersWithSpecificUsernameSortedByLastname() throws Exception {
         this.mockMvc.perform
                 (get("/users?keyword={keyword}&page={page}&pageSize={pageSize}&sort={sort}",
-                        "joh", 2, 1, "lastName,DESC")
+                        "Joh", 2, 1, "lastName,DESC")
                         .with(csrf())
                         .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(1)))
-                .andExpect(jsonPath("$.[0].lastName", is("Locke")))
-                .andExpect(jsonPath("$.[0].email", is("john.locke@gmail.com")));
+                .andExpect(jsonPath("$.[0].lastName", is("Keynes")))
+                .andExpect(jsonPath("$.[0].email", is("john.keynes@gmail.com")));
     }
 
 }

@@ -44,7 +44,6 @@ class UserControllerIT {
 
     private final Long USER_ID = 2L;
 
-    //FIXME not works
     @Test
     void getAllUsers() throws Exception {
         this.mockMvc.perform(get("/users/all")
