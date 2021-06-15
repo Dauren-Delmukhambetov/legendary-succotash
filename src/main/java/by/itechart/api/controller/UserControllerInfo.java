@@ -13,6 +13,20 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface UserControllerInfo {
+
+    @Operation(security = @SecurityRequirement(name = "basicAuth"))
+    @ApiOperation(value = "Get all active users", notes = "This method will return all active users", authorizations = {
+            @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
+    })
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully returned all active users"),
+            @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
+            @ApiResponse(code = 403, message = "Forbidden access to resource"),
+            @ApiResponse(code = 500, message = "Server error. Something went wrong")})
+    ResponseEntity<List<UserDTO>> getActiveUsers(Pageable pageable,
+                                                 @ApiParam(value = "OPTIONAL. Specific keyword for filtering.")
+                                                         String keyword);
+
+
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @ApiOperation(value = "Get all users", notes = "This method will return all users", authorizations = {
             @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
@@ -21,7 +35,9 @@ public interface UserControllerInfo {
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
-    ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable, String keyword);
+    ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable,
+                                              @ApiParam(value = "OPTIONAL. Specific keyword for filtering.")
+                                                      String keyword);
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
     @ApiOperation(value = "Get current user", notes = "This method will return current user")

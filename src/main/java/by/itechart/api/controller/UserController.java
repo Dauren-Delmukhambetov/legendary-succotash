@@ -4,6 +4,7 @@ import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.service.UserService;
+import by.itechart.api.util.annotation.ApiPageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -23,9 +25,10 @@ public class UserController implements UserControllerInfo {
 
     private final UserService userService;
 
+    @ApiPageable
     @GetMapping
     @RolesAllowed("ROLE_ADMIN")
-    public ResponseEntity<List<UserDTO>> getActiveUsers(@PageableDefault(sort = "firstName") Pageable pageable,
+    public ResponseEntity<List<UserDTO>> getActiveUsers(@PageableDefault(sort = "firstName") @ApiIgnore Pageable pageable,
                                                         @RequestParam(defaultValue = "", required = false)
                                                                 String keyword) {
         return new ResponseEntity<>(userService.findAllActiveUsers(pageable, keyword), HttpStatus.OK);

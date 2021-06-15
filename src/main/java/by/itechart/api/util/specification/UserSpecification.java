@@ -1,6 +1,7 @@
 package by.itechart.api.util.specification;
 
 import by.itechart.api.entity.User;
+import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
@@ -11,6 +12,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class UserSpecification implements Specification<User> {
     private final String keyword;
     private boolean isOnlyActiveUsers = false;
@@ -30,9 +32,9 @@ public class UserSpecification implements Specification<User> {
 
 
         if (!ObjectUtils.isEmpty(keyword)) {
-            predicates.add(cb.or(cb.like((root.get("firstName")), "%" + keyword + "%"),
-                    cb.like(root.get("lastName"), "%" + keyword + "%"),
-                    cb.like(root.get("email"), "%" + keyword + "%")));
+            predicates.add(cb.or(cb.like(cb.lower(root.get("firstName")), "%" + keyword.toLowerCase() + "%"),
+                    cb.like(cb.lower(root.get("lastName")), "%" + keyword.toLowerCase() + "%"),
+                    cb.like(cb.lower(root.get("email")), "%" + keyword.toLowerCase() + "%")));
         }
         if (isOnlyActiveUsers) {
             predicates.add(cb.isNull(root.get("deletedAt")));

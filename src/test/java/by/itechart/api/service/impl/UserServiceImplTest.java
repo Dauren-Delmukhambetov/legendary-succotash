@@ -9,7 +9,6 @@ import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.util.specification.UserSpecification;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,18 +86,16 @@ class UserServiceImplTest {
         assertThat(userEntity.getDeletedAt()).isNotNull();
     }
 
-    //FIXME why this is not working?
-    @Disabled
+
     @Test
     @DisplayName("Find all users")
     void testFindAllUsers() {
         List<User> suggestedAllUsers = List.of(new User(), new User());
         Page<User> page = new PageImpl<>(suggestedAllUsers);
-        UserSpecification specification = new UserSpecification(null);
+        UserSpecification userSpecification = new UserSpecification("");
         var pageRequestWithFirstNameSort = PageRequest.of(1, 10, Sort.by("firstName"));
-        when(userRepository.findAll(specification, pageRequestWithFirstNameSort))
-                .thenReturn(page);
-        List<UserDTO> resultAllUsers = userService.findAll(pageRequestWithFirstNameSort, null);
+        when(userRepository.findAll(userSpecification, pageRequestWithFirstNameSort)).thenReturn(page);
+        List<UserDTO> resultAllUsers = userService.findAll(pageRequestWithFirstNameSort, "");
         assertThat(resultAllUsers).size().isEqualTo(2);
     }
 
