@@ -78,7 +78,7 @@ class UserFilteringIT {
     }
 
     @Test
-    @DisplayName("Should get active users with specific filtering keyword")
+    @DisplayName("Should get active users with specific case insensitive filtering keyword")
     void getActiveUsersWithSpecificUsernameSortedByLastname() throws Exception {
         this.mockMvc.perform
                 (get("/users?keyword={keyword}&page={page}&pageSize={pageSize}&sort={sort}",

@@ -23,7 +23,7 @@ public interface UserControllerInfo {
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
     ResponseEntity<List<UserDTO>> getActiveUsers(Pageable pageable,
-                                                 @ApiParam(value = "OPTIONAL. Specific keyword for filtering.")
+                                                 @ApiParam(value = "Specific keyword for filtering. Can be empty")
                                                          String keyword);
 
 
@@ -36,7 +36,7 @@ public interface UserControllerInfo {
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
             @ApiResponse(code = 500, message = "Server error. Something went wrong")})
     ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable,
-                                              @ApiParam(value = "OPTIONAL. Specific keyword for filtering.")
+                                              @ApiParam(value = "Specific keyword for filtering. Can be empty")
                                                       String keyword);
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
