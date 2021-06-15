@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAll(Pageable pageable, String keyword) {
-        UserSpecification userSpecification = new UserSpecification(keyword);
+        var userSpecification = new UserSpecification(keyword);
         Page<User> userPage = userRepository.findAll(userSpecification, pageable);
         return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
 
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAllActiveUsers(Pageable pageable, String keyword) {
-        UserSpecification userSpecification = new UserSpecification(keyword, true);
+        var userSpecification = new UserSpecification(keyword, true);
         Page<User> userPage = userRepository.findAll(userSpecification, pageable);
         return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
