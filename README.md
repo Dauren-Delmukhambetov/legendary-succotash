@@ -1,4 +1,7 @@
 ##### legendary-succotash
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Dauren-Delmukhambetov_legendary-succotash&metric=alert_status)](https://sonarcloud.io/dashboard?id=Dauren-Delmukhambetov_legendary-succotash)
+
 # Users API
 
 #### Short Description
