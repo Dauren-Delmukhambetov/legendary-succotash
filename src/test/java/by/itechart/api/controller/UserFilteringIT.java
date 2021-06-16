@@ -33,7 +33,6 @@ class UserFilteringIT {
     private final String ADMIN_USERNAME = "admin@admin.com";
     private final String ADMIN_PASSWORD = "Password123";
 
-
     @Test
     @DisplayName("Should get two users with specific filtering keyword 'am' ")
     void getUsersWithSpecificFirstname() throws Exception {
@@ -78,13 +77,12 @@ class UserFilteringIT {
     }
 
     @Test
-    @DisplayName("Should get active users with specific case insensitive filtering keyword")
+    @DisplayName("Should get active users using case-insensitive filtering by given keyword")
     void getActiveUsersWithSpecificUsernameSortedByLastname() throws Exception {
-        this.mockMvc.perform
-                (get("/users?keyword={keyword}&page={page}&pageSize={pageSize}&sort={sort}",
-                        "Joh", 2, 1, "lastName,DESC")
-                        .with(csrf())
-                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
+        this.mockMvc.perform(get("/users?keyword={keyword}&page={page}&pageSize={pageSize}&sort={sort}",
+                "Joh", 2, 1, "lastName,DESC")
+                .with(csrf())
+                .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*.id", hasSize(1)))

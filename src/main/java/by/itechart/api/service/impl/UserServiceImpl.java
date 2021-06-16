@@ -24,9 +24,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @RequiredArgsConstructor
@@ -75,15 +75,15 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll(Pageable pageable, String keyword) {
         var userSpecification = new UserSpecification(keyword);
         Page<User> userPage = userRepository.findAll(userSpecification, pageable);
-        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return userPage.stream().map(this::convertToDTO).collect(toUnmodifiableList());
 
     }
 
     @Override
-    public List<UserDTO> findAllActiveUsers(Pageable pageable, String keyword) {
+    public List<UserDTO> findActiveUsers(Pageable pageable, String keyword) {
         var userSpecification = new UserSpecification(keyword, true);
         Page<User> userPage = userRepository.findAll(userSpecification, pageable);
-        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return userPage.stream().map(this::convertToDTO).collect(toUnmodifiableList());
     }
 
     @Override

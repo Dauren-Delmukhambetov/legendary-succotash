@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 public class UserSpecification implements Specification<User> {
     private final String keyword;
-    private boolean isOnlyActiveUsers = false;
+    private boolean isOnlyActiveUsers;
 
     public UserSpecification(String keyword) {
         this.keyword = keyword;
@@ -30,7 +30,6 @@ public class UserSpecification implements Specification<User> {
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         final List<Predicate> predicates = new ArrayList<>();
 
-
         if (!ObjectUtils.isEmpty(keyword)) {
             predicates.add(cb.or(cb.like(cb.lower(root.get("firstName")), "%" + keyword.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("lastName")), "%" + keyword.toLowerCase() + "%"),
@@ -42,5 +41,4 @@ public class UserSpecification implements Specification<User> {
 
         return cb.and(predicates.toArray(new Predicate[]{}));
     }
-
 }

@@ -51,7 +51,6 @@ class UserServiceImplTest {
     private static final Long EXISTING_USER_ID = 1L;
     private static final Long NOT_EXISTED_ID_FOR_USER = 2L;
 
-
     @Test
     @DisplayName("Create new user")
     void testCreateNewUser() {
@@ -85,7 +84,6 @@ class UserServiceImplTest {
         userService.delete(EXISTING_USER_ID);
         assertThat(userEntity.getDeletedAt()).isNotNull();
     }
-
 
     @Test
     @DisplayName("Find all users")
@@ -156,7 +154,6 @@ class UserServiceImplTest {
         userEntity.setLastName("bagratyan");
         return userEntity;
     }
-
 
     private UpdateUserDTO buildUpdateUserDTO() {
         UpdateUserDTO userDTO = new UpdateUserDTO();
