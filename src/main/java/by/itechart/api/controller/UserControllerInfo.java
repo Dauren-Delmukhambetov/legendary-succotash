@@ -4,7 +4,10 @@ import by.itechart.api.dto.CreateUserDTO;
 import by.itechart.api.dto.UpdateUserDTO;
 import by.itechart.api.dto.UserDTO;
 import by.itechart.api.util.annotation.ApiPageable;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +20,7 @@ import java.util.List;
 public interface UserControllerInfo {
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
-    @ApiOperation(value = "Get all active users", notes = "This method will return all active users", authorizations = {
-            @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
-    })
+    @ApiOperation(value = "Get all active users", notes = "This method will return all active users")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully returned all active users"),
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),
@@ -31,9 +32,7 @@ public interface UserControllerInfo {
 
 
     @Operation(security = @SecurityRequirement(name = "basicAuth"))
-    @ApiOperation(value = "Get all users", notes = "This method will return all users", authorizations = {
-            @Authorization(value = "basic", scopes = {@AuthorizationScope(scope = "getUsers", description = "getAllUsers")})
-    })
+    @ApiOperation(value = "Get all users", notes = "This method will return all users")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Successfully returned all users"),
             @ApiResponse(code = 401, message = "Unauthorized to perform this operation"),
             @ApiResponse(code = 403, message = "Forbidden access to resource"),

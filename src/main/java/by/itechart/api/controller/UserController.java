@@ -23,7 +23,6 @@ public class UserController implements UserControllerInfo {
 
     private final UserService userService;
 
-
     @GetMapping
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<UserDTO>> getActiveUsers(@PageableDefault(sort = "firstName") Pageable pageable,
