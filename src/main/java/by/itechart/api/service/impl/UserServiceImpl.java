@@ -12,6 +12,7 @@ import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
 import by.itechart.api.service.UserService;
+import by.itechart.api.util.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @RequiredArgsConstructor
@@ -71,15 +72,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findAll(Pageable pageable) {
-        Page<User> userPage = userRepository.findAll(pageable);
-        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public List<UserDTO> findAll(Pageable pageable, String keyword) {
+        var userSpecification = new UserSpecification(keyword);
+        Page<User> userPage = userRepository.findAll(userSpecification, pageable);
+        return userPage.stream().map(this::convertToDTO).collect(toUnmodifiableList());
+
     }
 
     @Override
-    public List<UserDTO> findAllActiveUsers(Pageable pageable) {
-        Page<User> userPage = userRepository.findByDeletedAtIsNull(pageable);
-        return userPage.stream().map(this::convertToDTO).collect(Collectors.toList());
+    public List<UserDTO> findActiveUsers(Pageable pageable, String keyword) {
+        var userSpecification = new UserSpecification(keyword, true);
+        Page<User> userPage = userRepository.findAll(userSpecification, pageable);
+        return userPage.stream().map(this::convertToDTO).collect(toUnmodifiableList());
     }
 
     @Override

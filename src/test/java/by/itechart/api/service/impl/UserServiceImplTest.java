@@ -8,6 +8,7 @@ import by.itechart.api.exception.UserNotAuthenticatedException;
 import by.itechart.api.exception.UserNotFoundException;
 import by.itechart.api.repository.UserRepository;
 import by.itechart.api.repository.UserRoleRepository;
+import by.itechart.api.util.specification.UserSpecification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +51,6 @@ class UserServiceImplTest {
     private static final Long EXISTING_USER_ID = 1L;
     private static final Long NOT_EXISTED_ID_FOR_USER = 2L;
 
-
     @Test
     @DisplayName("Create new user")
     void testCreateNewUser() {
@@ -90,9 +90,10 @@ class UserServiceImplTest {
     void testFindAllUsers() {
         List<User> suggestedAllUsers = List.of(new User(), new User());
         Page<User> page = new PageImpl<>(suggestedAllUsers);
+        UserSpecification userSpecification = new UserSpecification("");
         var pageRequestWithFirstNameSort = PageRequest.of(1, 10, Sort.by("firstName"));
-        when(userRepository.findAll(pageRequestWithFirstNameSort)).thenReturn(page);
-        List<UserDTO> resultAllUsers = userService.findAll(pageRequestWithFirstNameSort);
+        when(userRepository.findAll(userSpecification, pageRequestWithFirstNameSort)).thenReturn(page);
+        List<UserDTO> resultAllUsers = userService.findAll(pageRequestWithFirstNameSort, "");
         assertThat(resultAllUsers).size().isEqualTo(2);
     }
 
@@ -153,7 +154,6 @@ class UserServiceImplTest {
         userEntity.setLastName("bagratyan");
         return userEntity;
     }
-
 
     private UpdateUserDTO buildUpdateUserDTO() {
         UpdateUserDTO userDTO = new UpdateUserDTO();
